@@ -24,9 +24,7 @@ document.querySelectorAll('button').forEach(button => {
         };
 
         if(this.id == 'result'){
-            if(!output.value.trim()){
-
-            };
+            clear();
         };
     });
 });
