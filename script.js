@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function(){
 const output = document.querySelector('input#output');
+let history = [];
 
 document.querySelectorAll('button').forEach(button => {
     button.addEventListener('click', function(e){
@@ -9,6 +10,8 @@ document.querySelectorAll('button').forEach(button => {
 
         if(this.id == 'allClear'){
             clear();
+            history = [];
+            createHistory();
         };
 
         if(this.classList.contains('number')){
@@ -55,17 +58,7 @@ function addOperator(content){
 
     if(['-', ' ', '.'].includes(lastChar)) return;
 
-    switch(content){
-        case "%":
-            output.value += "\u00F7";
-            break;
-        case "X":
-            output.value += "x"
-            break;
-        default:
-            output.value += content;
-            break;
-    };
+    output.value += content;
 };
 
 function addDecimal(){
@@ -75,25 +68,18 @@ function addDecimal(){
 
     const expression = output.value.trim();
     const lastChar = expression.slice(-1);
-    const lastOperator = Math.max(
-        expression.lastIndexOf('+'),
-        expression.lastIndexOf('-'),
-        expression.lastIndexOf('\u00F7'),
-        expression.lastIndexOf('x')
-    );
-    const currentNumber = expression.substring(lastOperator + 1);
     
     if(!expression){
         output.value = "0.";
         return;
     };
 
-    if(['+', '-', '\u00F7', 'x', ' '].includes(lastChar)){
-        output.value = "0.";
-        return;
+    if(['+', '\u00F7', 'x', '-'].includes(lastChar)){
+        output.value += "0.";
+        return
     };
 
-    if(currentNumber.includes('.')) return;
+    if(lastChar === '.') return;
 
     output.value += '.';
 };
@@ -105,14 +91,16 @@ function calculate(){
     };
 
     try {
+        const ogExpression = output.value;
         const normalized = normalizeExpression(output.value);
         const result = Function(`"use strict"; return (${normalized})`)();
 
         if(!Number.isFinite(result)){
             throw new Error("Invalid math");
-        }
+        };
 
         output.value = result;
+        addHistory(ogExpression, result);
     } catch {
         output.value = "[ERRO] Expressão Inválida!";
     }
@@ -132,5 +120,26 @@ function normalizeExpression(exp){
     return exp
         .replace(/x/g, '*')
         .replace(/÷/g, '/');
+};
+
+function addHistory(expression, result){
+    history.unshift({expression, result});
+
+    if(history.length > 5){
+        history.pop();
+    };
+
+    createHistory();
+};
+
+function createHistory(){
+    const list = document.querySelector('ul#history');
+    list.innerHTML = '';
+
+    history.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.expression} = ${item.result}`;
+        list.appendChild(li);
+    });
 };
 });
