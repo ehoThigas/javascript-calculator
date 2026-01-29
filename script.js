@@ -26,6 +26,14 @@ document.querySelectorAll('button').forEach(button => {
             addOperator(button.textContent);
         };
 
+        if(this.id == 'percentage'){
+            applyPercentage();
+        };
+
+        if(this.id == 'invert'){
+            invertExpression();
+        }
+
         if(this.id == 'result'){
             calculate();
         };
@@ -37,22 +45,17 @@ function clear(){
 };
 
 function addContent(content){
-    if(isErrorState()){
-        clear();
-    };
+    if(isErrorState()) clear();
 
     output.value += content;
 };
 
 function addOperator(content){
-    if(isErrorState()){
-        clear();
-    };
+    if(isErrorState()) clear();
 
-    const expression = output.value.trim();
-    const lastChar = expression.slice(-1);
+    const lastChar = output.value.slice(-1);
 
-    if(!expression && content !== '-') return;
+    if(!output.value && content !== '-') return;
 
     if(['+', '\u00F7', 'x', ' ', '.'].includes(lastChar) && content !== '-') return;
 
@@ -62,14 +65,11 @@ function addOperator(content){
 };
 
 function addDecimal(){
-    if(isErrorState()){
-        clear();
-    };
+    if(isErrorState()) clear();
 
-    const expression = output.value.trim();
-    const lastChar = expression.slice(-1);
+    const lastChar = output.value.slice(-1);
     
-    if(!expression){
+    if(!output.value){
         output.value = "0.";
         return;
     };
@@ -82,6 +82,41 @@ function addDecimal(){
     if(lastChar === '.') return;
 
     output.value += '.';
+};
+
+function applyPercentage(){
+    if(isErrorState()) clear();
+
+    const lastChar = output.value.match(/(\d+(\.\d+)?)$/);
+    if(!lastChar) return;
+
+    const number = Number(lastChar[0]);
+
+    if(!isFinite(number)) return;
+
+    const percentage = number/100;
+
+    output.value = output.value.slice(0, -lastChar[0].length) + percentage;
+};
+
+function invertExpression(){
+    if(isErrorState()) return;
+
+    const lastChar = output.value.match(/([+\-*/]?)(\d+(\.\d+)?)$/);
+    if(!lastChar) return;
+
+    const operator = lastChar[1];
+    const number = Number(lastChar[2]);
+
+    if(!isFinite(number)) return;
+
+    const inverted = -number;
+
+    if(operator === '+') newOperator = '-';
+    else if (operator === '-') newOperator = '+';
+    else if (!operator && inverted < 0) newOperator = '-';
+
+    output.value = output.value.slice(0, -lastChar[0].length) + newOperator + Math.abs(inverted);
 };
 
 function calculate(){
@@ -119,7 +154,7 @@ function isErrorState(){
 function normalizeExpression(exp){
     return exp
         .replace(/x/g, '*')
-        .replace(/÷/g, '/');
+        .replace(/÷/g, '/')
 };
 
 function addHistory(expression, result){
