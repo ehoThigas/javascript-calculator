@@ -1,1 +1,116 @@
 @charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Roboto Mono", monospace;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: #1f2937;
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+div#app{
+    position: relative;
+    height: 100vh;
+}
+
+main {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background-color: #111827;
+    padding: 30px;
+    width: 500px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.236);
+}
+
+input#output{
+    background-color: #1f2937;
+    width: 100%;
+    height: 100px;
+    font-size: 3rem;
+    text-align: end;
+    color: #d1d5db;
+    padding: 10px;
+    margin-bottom: 20px;
+    word-wrap: break-word;
+    word-break: break-all;
+    border: none;
+    border-radius: 15px;
+}
+
+button{
+    background-color: #1f2937;
+    color: #d1d5db;
+    font-size: 1.5rem;
+    min-height: 80px;
+    min-width: 80px;
+    padding: 10px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+button:hover{
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+button:active{
+    transform: scale(0.95);
+    filter: brightness(1.4);
+}
+
+div#keys{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+
+button#clear{
+    grid-row: span 2;
+}
+
+button#plus{
+    grid-row: span 2;
+}
+
+button#result{
+    grid-row: span 2;
+}
+
+button#key-zero{
+    grid-column: span 2;
+}
+
+button#allClear{
+    grid-row: span 2;
+}
+
+ul#history{
+    text-align: right;
+    font-size: 1.7em;
+    color: #d1d5db;
+
+    position: absolute;
+    top: calc(50% + 260px);
+    left: 50%;
+    transform: translateX(-50%);
+
+    max-height: 200px;
+    width: 500px;
+    padding: 10px;
+    margin-top: 50px;
+}

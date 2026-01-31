@@ -7,31 +7,34 @@
     <link rel="stylesheet" href="styles/style.css">
     <script src="script.js"></script>
 </head>
-<header>
-    <h1>JavaScript Calculator</h1>
-    <ul id="history" type="none"></ul>
-</header>
 <body>
-    <input type="text" name="output" id="output" disabled>
-    <button id="clear">C</button>
-    <button id="allClear">AC</button>
-    <button class="operator">&#247</button>
-    <button class="operator">x</button>
-    <button class="operator">+</button>
-    <button class="operator">-</button>
-    <button id="decimal">.</button>
-    <button class="number">7</button>
-    <button class="number">8</button>
-    <button class="number">9</button>
-    <button class="number">4</button>
-    <button class="number">5</button>
-    <button class="number">6</button>
-    <button class="number">1</button>
-    <button class="number">2</button>
-    <button class="number">3</button>
-    <button class="number">0</button>
-    <button id="percentage">%</button>
-    <button id="invert">+/-</button>
-    <button id="result">=</button>
+<div id="app">
+    <main>
+        <input type="text" name="output" id="output" disabled>
+        <div id="keys">
+            <button id="percentage">%</button>
+            <button class="operator" id="key-mult">x</button>
+            <button class="operator" id="key-div">&#247</button>
+            <button class="operator" id="minus">-</button>
+            <button id="clear">C</button>
+            <button class="number" id="key-seven">7</button>
+            <button class="number" id="key-eight">8</button>
+            <button class="number" id="key-nine">9</button>
+            <button class="operator" id="plus">+</button>
+            <button class="number" id="key-four">4</button>
+            <button class="number" id="key-five">5</button>
+            <button class="number" id="key-six">6</button>
+            <button id="allClear">AC</button>
+            <button class="number" id="key-one">1</button>
+            <button class="number" id="key-two">2</button>
+            <button class="number" id="key-three">3</button>
+            <button id="result">=</button>
+            <button class="number" id="key-zero">0</button>
+            <button id="decimal">.</button>
+            <button id="invert">+/-</button>
+        </div>
+    </main>
+    <ul id="history" type="none"></ul>
+</div>
 </body>
 </html>

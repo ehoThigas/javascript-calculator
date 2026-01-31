@@ -121,7 +121,7 @@ function invertExpression(){
 
 function calculate(){
     if(!endsWithNumber(output.value)){
-        output.value = "[ERRO] Expressão Inválida!"
+        output.value = "[ERRO]"
         return;
     };
 
@@ -133,11 +133,11 @@ function calculate(){
         if(!Number.isFinite(result)){
             throw new Error("Invalid math");
         };
-
+        
         output.value = result;
         addHistory(ogExpression, result);
     } catch {
-        output.value = "[ERRO] Expressão Inválida!";
+        output.value = "[ERRO]";
     }
 };
 
