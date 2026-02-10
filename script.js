@@ -1,12 +1,14 @@
-document.addEventListener('DOMContentLoaded', function(){
+document.addEventListener('DOMContentLoaded', () => {
 const output = document.querySelector('input#output');
 const ERROR_STATE = "[ERRO]"
 const historyList = document.querySelector('ul#history');
 let history = [];
 
 document.querySelectorAll('button').forEach(button => {
-    button.addEventListener('click', function(e){
-        switch (this.id){
+    button.addEventListener('click', (e) => {
+        const button = e.currentTarget;
+
+        switch (button.id){
             case 'clear':
                 clear();
                 return;
@@ -34,12 +36,12 @@ document.querySelectorAll('button').forEach(button => {
                 return;
         };
         
-        if(this.classList.contains('number')){
-            addContent(this.textContent);
+        if(button.classList.contains('number')){
+            addContent(button.textContent);
         };
         
-        if(this.classList.contains('operator')){
-            addOperator(this.textContent);
+        if(button.classList.contains('operator')){
+            addOperator(button.textContent);
         };
     });
 });
