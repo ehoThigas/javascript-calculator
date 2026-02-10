@@ -3,6 +3,7 @@ const output = document.querySelector('input#output');
 const ERROR_STATE = "[ERRO]"
 const historyList = document.querySelector('ul#history');
 let history = [];
+const historyPanel = document.querySelector('aside#history-panel');
 
 document.querySelectorAll('button').forEach(button => {
     button.addEventListener('click', (e) => {
@@ -33,6 +34,11 @@ document.querySelectorAll('button').forEach(button => {
 
             case 'result':
                 calculate();
+                return;
+
+            case 'toggleHistory':
+            case 'closeHistory' :
+                toggleMenu();
                 return;
         };
         
@@ -181,4 +187,8 @@ function createHistory(){
         historyList.appendChild(li);
     });
 };
+
+function toggleMenu(){
+    historyPanel.classList.toggle('open');
+}
 });

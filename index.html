@@ -5,11 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JavaScript Calculator</title>
     <link rel="stylesheet" href="styles/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="script.js"></script>
 </head>
 <body>
 <div id="app">
     <main>
+        <header class="calc-header">
+            <span class="app-title">Calc</span>
+            <button id="toggleHistory" class="icon-btn">
+                <span class="material-icons">history</span>
+            </button>
+        </header>
         <input type="text" name="output" id="output" disabled>
         <div id="keys">
             <button id="percentage">%</button>
@@ -34,7 +41,15 @@
             <button id="invert">+/-</button>
         </div>
     </main>
-    <ul id="history" type="none"></ul>
+    <aside id="history-panel">
+        <div class="history-header">
+            <h3>Histórico</h3>
+            <button id="closeHistory" class="icon-btn">
+                <span class="material-icons">close</span>
+            </button>
+        </div>
+        <ul id="history" type="none"></ul>
+    </aside>
 </div>
 </body>
 </html>
