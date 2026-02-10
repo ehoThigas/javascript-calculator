@@ -1,71 +1,75 @@
 document.addEventListener('DOMContentLoaded', function(){
 const output = document.querySelector('input#output');
+const ERROR_STATE = "[ERRO]"
+const historyList = document.querySelector('ul#history');
 let history = [];
 
 document.querySelectorAll('button').forEach(button => {
     button.addEventListener('click', function(e){
-        if(this.id == 'clear'){
-            clear();
-        };
+        switch (this.id){
+            case 'clear':
+                clear();
+                return;
 
-        if(this.id == 'allClear'){
-            clear();
-            history = [];
-            createHistory();
-        };
+            case 'allClear':
+                clear();
+                history = [];
+                createHistory();
+                return;
 
+            case 'decimal':
+                addDecimal();
+                return;
+
+            case 'percentage':
+                applyPercentage();
+                return;
+
+            case 'invert':
+                invertExpression();
+                return;
+
+            case 'result':
+                calculate();
+                return;
+        };
+        
         if(this.classList.contains('number')){
-            addContent(button.textContent);
+            addContent(this.textContent);
         };
-
-        if(this.id == 'decimal'){
-            addDecimal();
-        };
-
+        
         if(this.classList.contains('operator')){
-            addOperator(button.textContent);
-        };
-
-        if(this.id == 'percentage'){
-            applyPercentage();
-        };
-
-        if(this.id == 'invert'){
-            invertExpression();
-        }
-
-        if(this.id == 'result'){
-            calculate();
+            addOperator(this.textContent);
         };
     });
 });
 
 function clear(){
-    output.value = "";
+    output.value = '';
 };
 
 function addContent(content){
-    if(isErrorState()) clear();
+    resetIfError();
 
     output.value += content;
 };
 
 function addOperator(content){
-    if(isErrorState()) clear();
+    resetIfError();
 
     const lastChar = output.value.slice(-1);
 
     if(!output.value && content !== '-') return;
 
-    if(['+', '\u00F7', 'x', ' ', '.'].includes(lastChar) && content !== '-') return;
+    if(['+', '÷', 'x', '.'].includes(lastChar) && content !== '-') return;
 
-    if(['-', ' ', '.'].includes(lastChar)) return;
+    if(['-', '.'].includes(lastChar)) return;
 
     output.value += content;
 };
 
 function addDecimal(){
-    if(isErrorState()) clear();
+    resetIfError();
 
     const lastChar = output.value.slice(-1);
     
@@ -74,9 +78,9 @@ function addDecimal(){
         return;
     };
 
-    if(['+', '\u00F7', 'x', '-'].includes(lastChar)){
+    if(['+', '÷', 'x', '-'].includes(lastChar)){
         output.value += "0.";
-        return
+        return;
     };
 
     if(lastChar === '.') return;
@@ -85,7 +89,7 @@ function addDecimal(){
 };
 
 function applyPercentage(){
-    if(isErrorState()) clear();
+    resetIfError();
 
     const lastChar = output.value.match(/(\d+(\.\d+)?)$/);
     if(!lastChar) return;
@@ -94,13 +98,13 @@ function applyPercentage(){
 
     if(!isFinite(number)) return;
 
-    const percentage = number/100;
+    const percentage = number / 100;
 
     output.value = output.value.slice(0, -lastChar[0].length) + percentage;
 };
 
 function invertExpression(){
-    if(isErrorState()) return;
+    resetIfError();
 
     const lastChar = output.value.match(/([+\-*/]?)(\d+(\.\d+)?)$/);
     if(!lastChar) return;
@@ -111,6 +115,7 @@ function invertExpression(){
     if(!isFinite(number)) return;
 
     const inverted = -number;
+    let newOperator = '';
 
     if(operator === '+') newOperator = '-';
     else if (operator === '-') newOperator = '+';
@@ -121,13 +126,13 @@ function invertExpression(){
 
 function calculate(){
     if(!endsWithNumber(output.value)){
-        output.value = "[ERRO]"
+        output.value = ERROR_STATE;
         return;
     };
 
     try {
         const ogExpression = output.value;
-        const normalized = normalizeExpression(output.value);
+        const normalized = normalizeExpression(ogExpression);
         const result = Function(`"use strict"; return (${normalized})`)();
 
         if(!Number.isFinite(result)){
@@ -137,7 +142,7 @@ function calculate(){
         output.value = result;
         addHistory(ogExpression, result);
     } catch {
-        output.value = "[ERRO]";
+        output.value = ERROR_STATE;
     }
 };
 
@@ -145,11 +150,9 @@ function endsWithNumber(value){
     return /\d$/.test(value);
 };
 
-function isErrorState(){
-    if(output.value.includes("[ERRO]")){
-        return true;
-    };
-};
+function resetIfError(){
+    if(output.value === ERROR_STATE) clear();
+}
 
 function normalizeExpression(exp){
     return exp
@@ -168,13 +171,12 @@ function addHistory(expression, result){
 };
 
 function createHistory(){
-    const list = document.querySelector('ul#history');
-    list.innerHTML = '';
+    historyList.innerHTML = '';
 
     history.forEach(item => {
         const li = document.createElement('li');
         li.textContent = `${item.expression} = ${item.result}`;
-        list.appendChild(li);
+        historyList.appendChild(li);
     });
 };
 });
